@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.nhom1.constants.Constants;
@@ -54,7 +55,7 @@ public class TimeKeepingQuery implements DAO.TimeKeepingQuery{
         String name_department="";
         Cursor cursor = null;
         try {
-            String query = "select * from "+Constants.TIMEKEEPING_DATE+" WHERE ("+Constants.TIMEKEEPING_ID_EMPLOYEE+"='"+idEmployee+"' AND "
+            String query = "select * from "+Constants.TIMEKEEPING_TABLE+" WHERE ("+Constants.TIMEKEEPING_ID_EMPLOYEE+"='"+idEmployee+"' AND "
                     +Constants.TIMEKEEPING_DATE+"='"+Helper.getCurrentDate()+"')";
             cursor =sqLiteDatabase.rawQuery(query,null);
             //cursor = sqLiteDatabase.query(Constants.DEPARMENT_TABLE, null, null, null, null, null, null);
@@ -75,7 +76,30 @@ public class TimeKeepingQuery implements DAO.TimeKeepingQuery{
 
     @Override
     public int readDateCurrentMonthOfEmployee(String idEmployee) {
-        return 0;
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+        String query = "select * from "+Constants.TIMEKEEPING_TABLE+" WHERE "+Constants.TIMEKEEPING_ID_EMPLOYEE+"='"+idEmployee+"'";
+        try{
+            cursor =sqLiteDatabase.rawQuery(query,null);
+           // cursor = sqLiteDatabase.query(Constants.TIMEKEEPING_TABLE, null,null,null,null,null,null);
+            if(cursor!=null && cursor.moveToFirst()){
+                do {
+                    Timekeeping timekeeping = getTimeKeepingFromCursor(cursor);
+                    if(Helper.checkDateInCurrentMonth(timekeeping.getDate())){
+                        count++;
+                    }
+
+                } while (cursor.moveToNext());
+            } else{}
+        }catch (Exception e){
+        } finally {
+            sqLiteDatabase.close();
+            if(cursor!=null)
+                cursor.close();
+        }
+        return count;
     }
     private ContentValues getContentValuesForTimeKeeping(Timekeeping timekeeping) {
         ContentValues contentValues = new ContentValues();

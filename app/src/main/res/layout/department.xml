@@ -22,8 +22,9 @@
 
         <ImageView
             android:id="@+id/imgAvatarDepartmentAdd"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:padding="10dp"
             android:src="@drawable/department" />
 
         <LinearLayout

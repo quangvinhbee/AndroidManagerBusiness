@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeQuery implements DAO.EmployeeQuery {
+    TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
     private final DbHelper dbHelper = DbHelper.getInstance();
 
     @Override
@@ -51,6 +52,7 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
             if(cursor!=null && cursor.moveToFirst()){
                 do {
                     Employee employee = getEmployeeFromCursor(cursor);
+                    employee.setWorkdays(timeKeepingQuery.readDateCurrentMonthOfEmployee(employee.get_id()));
                     if(ID_DEPARTMENT!=null ){
                         if(employee.get_idDepartment().equals(ID_DEPARTMENT))  employeeList.add(employee);
                     }else employeeList.add(employee);
@@ -95,6 +97,7 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
             if(cursor!=null && cursor.moveToFirst()){
                 do {
                     Employee employee = getEmployeeFromCursor(cursor);
+
                     if(employee.get_idDepartment().equals(idDepartment)){
                         employeeList.add(employee);
                     }

@@ -41,6 +41,7 @@ public class manager_employee extends AppCompatActivity {
     EmployeeAdapter adapter;
     AlertDialog.Builder builder;
     String ID_Department;
+    int totalWorkdays = 0;
     DAO.EmployeeQuery employeeQuery = new EmployeeQuery();
     DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
     DAO.TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
@@ -137,6 +138,7 @@ public class manager_employee extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Employee employee = data.get(position);
                 final Boolean[] check = {false};
+
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(manager_employee.this);
                 mBuilder.setTitle("Thông tin nhân viên " + employee.getName());
                 View mView = getLayoutInflater().inflate(R.layout.dialog_employee, null);
@@ -147,6 +149,8 @@ public class manager_employee extends AppCompatActivity {
                 ImageView imgAvt = mView.findViewById(R.id.imgAvatarEmployee);
                 Button btn_close = mView.findViewById(R.id.button_closeDialogEmployee);
                 Button btn_timekeeping = mView.findViewById(R.id.button_TimeKeeping);
+                totalWorkdays = timeKeepingQuery.readDateCurrentMonthOfEmployee(employee.get_id());
+                Log.e("TotalWorkDays",String.valueOf(totalWorkdays));
 
                 if (employee != null) {
                     timeKeepingQuery.checkTimeKeepingForEmployee(employee.get_id(), new QueryResponse<Boolean>() {
@@ -176,9 +180,7 @@ public class manager_employee extends AppCompatActivity {
                     if (employee.get_idDepartment() != null) {
                         tvDpEmployee.setText(String.valueOf(employee.getName_department()));
                     }
-                    if (employee.getWorkdays() != 0) {
-                        tvTotalWorkdays.setText(String.valueOf("Đã đi làm " + employee.getWorkdays() + " ngày"));
-                    }
+                    tvTotalWorkdays.setText(String.valueOf("Đã đi làm " + employee.getWorkdays() + " ngày"));
                     if (employee.getSalary() != 0) {
                         String salary = Helper.getCurrentFromNumber(employee.getSalary());
                         tvSalary.setText(salary+"/ tháng");

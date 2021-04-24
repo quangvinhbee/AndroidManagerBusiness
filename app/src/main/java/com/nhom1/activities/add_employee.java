@@ -116,17 +116,24 @@ public class add_employee extends AppCompatActivity {
 
             }
         });
-        for(Department item:listDepartment){
-            data.add(item.getName());
+        if (listDepartment != null)
+            for (Department item : listDepartment) {
+                data.add(item.getName());
+            }
+        else {
+            Toast.makeText(add_employee.this, "Chưa có phòng ban, không thể tạo nhân viên", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(add_employee.this, manager_employee.class);
+            startActivity(intent);
         }
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_image, R.id.spinnerTextview, data);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                for(Department item:listDepartment){
-                    if(item.getName().equals(data.get(position))){
+                for (Department item : listDepartment) {
+                    if (item.getName().equals(data.get(position))) {
                         employee.set_idDepartment(item.get_id());
                     }
                 }
@@ -206,7 +213,7 @@ public class add_employee extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 pd.dismiss();
-                                Toast.makeText(add_employee.this,"Đã tải ảnh lên",Toast.LENGTH_LONG).show();
+                                Toast.makeText(add_employee.this, "Đã tải ảnh lên", Toast.LENGTH_LONG).show();
                                 String imgURL = uri.toString();
                                 employee.setAvatar(imgURL);
                                 Log.e("Firebase message", "Thêm firebase thành công " + imgURL);
@@ -218,7 +225,7 @@ public class add_employee extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(add_employee.this,"Tải ảnh lên thất bại",Toast.LENGTH_LONG).show();
+                        Toast.makeText(add_employee.this, "Tải ảnh lên thất bại", Toast.LENGTH_LONG).show();
                         Log.e("Firebase message", "Thêm firebase thất bại");
                     }
                 })
@@ -226,7 +233,7 @@ public class add_employee extends AppCompatActivity {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                         double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                        pd.setMessage("Còn "+(int)progressPercent+ "% nữa hoàn thành");
+                        pd.setMessage("Còn " + (int) progressPercent + "% nữa hoàn thành");
                     }
                 });
     }
