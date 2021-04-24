@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.managerbusiness">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:name="com.nhom1.untils.MyApp"
+        android:theme="@style/Theme.ManagerBusiness">
+        <activity android:name="com.nhom1.activities.EditDepartment"></activity>
+        <activity android:name="com.nhom1.activities.EditEmployee" />
+        <activity android:name="com.nhom1.activities.add_employee" />
+        <activity android:name="com.nhom1.activities.manager_employee" />
+        <activity android:name="com.nhom1.activities.add_department" />
+        <activity
+            android:name="com.nhom1.activities.manager_department"
+            android:parentActivityName="com.nhom1.activities.MainActivity" />
+        <activity
+            android:name="com.nhom1.activities.Login"
+            android:parentActivityName="com.nhom1.activities.MainActivity" />
+        <activity android:name="com.nhom1.activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

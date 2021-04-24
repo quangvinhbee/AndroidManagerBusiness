@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Quản Lí Công Ty</string>
+    <string name="manager_department">Quản Lí Phòng Ban</string>
+    <string name="manager_employee">Quản Lí Nhân Viên</string>
+    <string name="timekeeping">Chấm Công</string>
+    <string name="acounting">Tính Lương</string>
+    <string name="statistical">Thống Kê</string>
+    <string name="nhom_1">Nhóm 1</string>
+    <string name="exit">Thoát</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <array name="Chau">
+        <item>@drawable/retailer</item>
+        <item>@drawable/department</item>
+        <item>Châu Úc</item>
+    </array>
+</resources>

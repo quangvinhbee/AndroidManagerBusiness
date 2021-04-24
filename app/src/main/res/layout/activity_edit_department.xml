@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nhom1.activities.EditDepartment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:src="@drawable/add" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp">
+
+            <ImageView
+                android:id="@+id/imageView_userIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimary"
+                android:padding="8dp"
+                android:src="@drawable/edit"
+                app:tint="@color/white" />
+
+            <EditText
+                android:id="@+id/editEditNameDepartment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageView_userIcon"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/imageView_userIcon"
+                android:background="@color/editTextBG"
+                android:hint="Nhập Tên Phòng Ban"
+                android:paddingLeft="20dp"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+        <Spinner
+            android:id="@+id/spinnerEditAvatarDepartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView_userIcon"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:textSize="15sp"
+            android:padding="8dp"
+            android:spinnerMode="dialog"
+            android:layout_toRightOf="@+id/imageView_userIcon"
+            android:background="@color/editTextBG"
+            />
+
+        <Button
+            android:id="@+id/button_editEdit_department"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:backgroundTint="#FFD17C"
+            android:fontFamily="sans-serif-medium"
+            android:text="Lưu thay đổi"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
