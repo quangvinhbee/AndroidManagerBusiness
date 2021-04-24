@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +24,7 @@ import com.nhom1.adapter.EmployeeAdapter;
 import com.nhom1.database.DAO;
 import com.nhom1.database.DAOimplement.DepartmentQuery;
 import com.nhom1.database.DAOimplement.EmployeeQuery;
+import com.nhom1.database.DAOimplement.TimeKeepingQuery;
 import com.nhom1.database.QueryResponse;
 import com.nhom1.helper.Helper;
 import com.nhom1.models.Employee;
@@ -41,6 +43,7 @@ public class manager_employee extends AppCompatActivity {
     String ID_Department;
     DAO.EmployeeQuery employeeQuery = new EmployeeQuery();
     DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
+    DAO.TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ;
@@ -132,8 +135,8 @@ public class manager_employee extends AppCompatActivity {
         lvEmployee.setOnItemClickListener(new AdapterView.OnItemClickListener() { // show dialog
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("message", String.valueOf(position));
                 Employee employee = data.get(position);
+                final Boolean[] check = {false};
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(manager_employee.this);
                 mBuilder.setTitle("Thông tin nhân viên " + employee.getName());
                 View mView = getLayoutInflater().inflate(R.layout.dialog_employee, null);
@@ -144,8 +147,25 @@ public class manager_employee extends AppCompatActivity {
                 ImageView imgAvt = mView.findViewById(R.id.imgAvatarEmployee);
                 Button btn_close = mView.findViewById(R.id.button_closeDialogEmployee);
                 Button btn_timekeeping = mView.findViewById(R.id.button_TimeKeeping);
-                Log.e("mesage", String.valueOf(tvfullname));
+
                 if (employee != null) {
+                    timeKeepingQuery.checkTimeKeepingForEmployee(employee.get_id(), new QueryResponse<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean data) {
+                            check[0] = data;
+                        }
+
+                        @Override
+                        public void onFailure(String message) {
+
+                        }
+                    });
+
+                    if(check[0]){
+                        btn_timekeeping.setEnabled(!check[0]);
+                        btn_timekeeping.setText("Đã chấm công");
+                    }
+
                     if (employee.getAvatar() != null) {
                         imgAvt.setImageURI(Uri.parse(employee.getAvatar()));
 //                        imgAvt.setImageResource(Integer.parseInt(employee.getAvatar()));
@@ -168,6 +188,25 @@ public class manager_employee extends AppCompatActivity {
                 mBuilder.setView(mView);
                 AlertDialog dialog = mBuilder.create();
                 dialog.show();
+                btn_timekeeping.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeKeepingQuery.addTimeKeeping(employee.get_id(), new QueryResponse<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean data) {
+                                if(data){
+                                    btn_timekeeping.setText("Đã chấm công");
+                                    btn_timekeeping.setEnabled(!true);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                Toast.makeText(manager_employee.this,"Failed timekeeping!",Toast.LENGTH_LONG);
+                            }
+                        });
+                    }
+                });
                 btn_close.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

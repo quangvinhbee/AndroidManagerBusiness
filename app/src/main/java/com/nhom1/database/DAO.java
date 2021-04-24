@@ -25,5 +25,7 @@ public class DAO {
     }
     public interface TimeKeepingQuery{
         void addTimeKeeping(String idEmployee,QueryResponse<Boolean> response);
+        void checkTimeKeepingForEmployee(String idEmployee,QueryResponse<Boolean> response);
+        int readDateCurrentMonthOfEmployee(String idEmployee);
     }
 }

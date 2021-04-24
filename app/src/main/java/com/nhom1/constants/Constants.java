@@ -35,7 +35,7 @@ public class Constants {
     public static final  String TIMEKEEPING_ID_EMPLOYEE = "Timekeeping_ID_EMPLOYEE";
     public static final String CREATE_TABLE_TIMEKEEPING = "CREATE TABLE " + Constants.TIMEKEEPING_TABLE + "("
             +Constants.TIMEKEEPING_ID+ " TEXT PRIMARY KEY, "
-            +Constants.TIMEKEEPING_DATE+" TEXT NOT NULL, "
+            +Constants.TIMEKEEPING_DATE+" TEXT, "
             +Constants.TIMEKEEPING_ID_EMPLOYEE+ " TEXT NOT NULL"
             +")";
 
