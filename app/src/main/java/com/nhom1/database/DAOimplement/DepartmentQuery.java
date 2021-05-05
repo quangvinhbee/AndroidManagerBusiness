@@ -92,7 +92,21 @@ public class DepartmentQuery implements DAO.DepartmentQuery {
 
     @Override
     public void updateDepartment(Department department, QueryResponse<Boolean> response) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
 
+        String id = String.valueOf(department.get_id());
+        ContentValues contentValues = getContentValuesForDepartment(department);
+        int row = sqLiteDatabase.update(Constants.DEPARMENT_TABLE,
+                contentValues,
+                Constants.DEPARMENT_ID + " = ?",
+                new String[]{id});
+        if(row>0){
+            response.onSuccess(true);
+            Toast.makeText(MyApp.context, "Chỉnh sửa thông tin thành công!", Toast.LENGTH_LONG).show();
+        }
+        else{
+            response.onFailure("Chỉnh sửa thông tin thất bại!");
+        }
     }
 
     @Override

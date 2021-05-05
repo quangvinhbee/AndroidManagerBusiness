@@ -1,7 +1,5 @@
 package com.nhom1.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,11 +9,18 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.managerbusiness.R;
 import com.nhom1.adapter.SpinnerAdapter;
+import com.nhom1.database.DAO;
+import com.nhom1.database.DAOimplement.DepartmentQuery;
+import com.nhom1.database.DAOimplement.EmployeeQuery;
+import com.nhom1.database.DAOimplement.TimeKeepingQuery;
+import com.nhom1.database.QueryResponse;
 import com.nhom1.models.Department;
-import com.nhom1.models.Employee;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,6 +32,9 @@ public class EditDepartment extends AppCompatActivity {
     Spinner spinnerAvt;
     EditText edtName;
     ArrayList<String> data = new ArrayList<>();
+    DAO.EmployeeQuery employeeQuery = new EmployeeQuery();
+    DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
+    DAO.TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +43,7 @@ public class EditDepartment extends AppCompatActivity {
 
         Intent intent = getIntent();
         Department temp = (Department) intent.getSerializableExtra("key_Department");
-        if(temp!=null){
+        if (temp != null) {
             department = temp;
         }
 
@@ -47,7 +55,7 @@ public class EditDepartment extends AppCompatActivity {
     }
 
     void setControl() {
-        btnEdit =findViewById(R.id.button_editEdit_department);
+        btnEdit = findViewById(R.id.button_editEdit_department);
         spinnerAvt = findViewById(R.id.spinnerEditAvatarDepartment);
         edtName = findViewById(R.id.editEditNameDepartment);
     }
@@ -76,9 +84,18 @@ public class EditDepartment extends AppCompatActivity {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                department.setCount_employee(10);
                 department.setName(edtName.getText().toString());
-                department.set_id("pPPPPP");
+                departmentQuery.updateDepartment(department, new QueryResponse<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean data) {
+                        Toast.makeText(EditDepartment.this, "Chỉnh sửa thông tin thành công!", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(EditDepartment.this, "Chỉnh sửa thông tin thất bại!", Toast.LENGTH_LONG).show();
+                    }
+                });
 
                 Intent intent = new Intent(EditDepartment.this, manager_department.class);
                 intent.putExtra("key_DepartmentEdit", (Serializable) department);
