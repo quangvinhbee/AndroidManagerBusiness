@@ -1,12 +1,12 @@
 package com.nhom1.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -45,6 +45,7 @@ public class manager_employee extends AppCompatActivity {
     DAO.EmployeeQuery employeeQuery = new EmployeeQuery();
     DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
     DAO.TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ;
@@ -59,7 +60,7 @@ public class manager_employee extends AppCompatActivity {
         getSupportActionBar().setTitle("Quản Lí Nhân Viên");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xff78CFFD));
 
-        if(ID_Department!=null){
+        if (ID_Department != null) {
             getSupportActionBar().setTitle(departmentQuery.readDepartment(ID_Department));
         }
 
@@ -105,9 +106,7 @@ public class manager_employee extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-        //Creating dialog box
         AlertDialog alert = builder.create();
-        //Setting the title manually
         alert.setTitle("Xác nhận xóa nhân viên");
         alert.show();
 
@@ -132,31 +131,45 @@ public class manager_employee extends AppCompatActivity {
     }
 
     private void showDialogEmployee() {
+
         lvEmployee.setAdapter(adapter); // set list view
         lvEmployee.setOnItemClickListener(new AdapterView.OnItemClickListener() { // show dialog
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Boolean[] checkin = {false};
+                final Boolean[] checkout = {false};
                 Employee employee = data.get(position);
                 final Boolean[] check = {false};
-
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(manager_employee.this);
-                mBuilder.setTitle("Thông tin nhân viên " + employee.getName());
                 View mView = getLayoutInflater().inflate(R.layout.dialog_employee, null);
                 TextView tvfullname = (TextView) mView.findViewById(R.id.tvFullnameEmployee);
                 TextView tvDpEmployee = (TextView) mView.findViewById(R.id.tvDpEmployee);
                 TextView tvTotalWorkdays = (TextView) mView.findViewById(R.id.tvTotalWorkdays);
+
+
                 TextView tvSalary = (TextView) mView.findViewById(R.id.tvSalaryEmployee);
                 ImageView imgAvt = mView.findViewById(R.id.imgAvatarEmployee);
-                Button btn_close = mView.findViewById(R.id.button_closeDialogEmployee);
-                Button btn_timekeeping = mView.findViewById(R.id.button_TimeKeeping);
+                ImageView btn_close = mView.findViewById(R.id.button_closeDialogEmployee);
+                Button btn_timekeeping_StartAt = mView.findViewById(R.id.button_TimeKeeping_StartAt);
+                Button btn_timekeeping_EndAt = mView.findViewById(R.id.button_TimeKeeping_EndAt);
                 totalWorkdays = timeKeepingQuery.readDateCurrentMonthOfEmployee(employee.get_id());
-                Log.e("TotalWorkDays",String.valueOf(totalWorkdays));
-
-                if (employee != null) {
-                    timeKeepingQuery.checkTimeKeepingForEmployee(employee.get_id(), new QueryResponse<Boolean>() {
+                if (employee != null) { // set data
+                    timeKeepingQuery.isCheckIn(employee.get_id(), new QueryResponse<Boolean>() {
                         @Override
                         public void onSuccess(Boolean data) {
-                            check[0] = data;
+                            checkin[0] = data;
+                        }
+
+                        @Override
+                        public void onFailure(String message) {
+
+                        }
+                    });
+                    timeKeepingQuery.isCheckOut(employee.get_id(), new QueryResponse<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean data) {
+                            checkout[0] = data;
                         }
 
                         @Override
@@ -165,10 +178,13 @@ public class manager_employee extends AppCompatActivity {
                         }
                     });
 
-                    if(check[0]){
-                        btn_timekeeping.setEnabled(!check[0]);
-                        btn_timekeeping.setText("Đã chấm công");
+                    if (checkin[0]) {
+                        btn_timekeeping_StartAt.setEnabled(false);
                     }
+                    if (checkout[0]) {
+                        btn_timekeeping_EndAt.setEnabled(false);
+                    }
+
 
                     if (employee.getAvatar() != null) {
                         imgAvt.setImageURI(Uri.parse(employee.getAvatar()));
@@ -183,33 +199,56 @@ public class manager_employee extends AppCompatActivity {
                     tvTotalWorkdays.setText(String.valueOf("Đã đi làm " + employee.getWorkdays() + " ngày"));
                     if (employee.getSalary() != 0) {
                         String salary = Helper.getCurrentFromNumber(employee.getSalary());
-                        tvSalary.setText(salary+"/ tháng");
+                        tvSalary.setText(salary + "/ tháng");
                     }
                 }
 
                 mBuilder.setView(mView);
                 AlertDialog dialog = mBuilder.create();
                 dialog.show();
-                btn_timekeeping.setOnClickListener(new View.OnClickListener() {
+                btn_timekeeping_StartAt.setOnClickListener(new View.OnClickListener() { // check In
                     @Override
                     public void onClick(View v) {
-                        timeKeepingQuery.addTimeKeeping(employee.get_id(), new QueryResponse<Boolean>() {
-                            @Override
-                            public void onSuccess(Boolean data) {
-                                if(data){
-                                    btn_timekeeping.setText("Đã chấm công");
-                                    btn_timekeeping.setEnabled(!true);
+                        if (!checkin[0])
+                            timeKeepingQuery.addCheckInTimeKeeping(employee.get_id(), new QueryResponse<Boolean>() {
+                                @Override
+                                public void onSuccess(Boolean data) {
+                                    if (data) {
+                                        Init();
+                                        adapter.notifyDataSetChanged();
+                                        btn_timekeeping_StartAt.setEnabled(!data);
+                                        Toast.makeText(manager_employee.this, "CheckIn thành công!", Toast.LENGTH_LONG);
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(String message) {
-                                Toast.makeText(manager_employee.this,"Failed timekeeping!",Toast.LENGTH_LONG);
-                            }
-                        });
+                                @Override
+                                public void onFailure(String message) {
+
+                                }
+                            });
                     }
                 });
-                btn_close.setOnClickListener(new View.OnClickListener() {
+                btn_timekeeping_EndAt.setOnClickListener(new View.OnClickListener() { // check out
+                    @Override
+                    public void onClick(View v) {
+                        if (checkin[0])
+                            timeKeepingQuery.addCheckOutTimeKeeping(employee.get_id(), new QueryResponse<Boolean>() {
+                                @Override
+                                public void onSuccess(Boolean data) {
+                                    Init();
+                                    adapter.notifyDataSetChanged();
+                                    btn_timekeeping_EndAt.setEnabled(!data);
+                                    Toast.makeText(manager_employee.this, "CheckOut thành công!", Toast.LENGTH_LONG);
+                                }
+
+                                @Override
+                                public void onFailure(String message) {
+
+                                }
+                            });
+                    }
+                });
+                btn_close.setOnClickListener(new View.OnClickListener() { // close dialog
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();

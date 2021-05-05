@@ -10,6 +10,7 @@ import com.nhom1.constants.Constants;
 import com.nhom1.database.DAO;
 import com.nhom1.database.DbHelper;
 import com.nhom1.database.QueryResponse;
+import com.nhom1.helper.Helper;
 import com.nhom1.models.Employee;
 import com.nhom1.untils.MyApp;
 
@@ -22,12 +23,13 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
 
     @Override
     public void addEmployee(Employee employee, QueryResponse<Boolean> response) {
+        employee.setCreateAt(Helper.getCurrentDate());
         try (SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase()) {
             ContentValues contentValues = getContentValuesForEmployee(employee);
             long sql = sqLiteDatabase.insertOrThrow(Constants.EMPLOYEE_TABLE, null, contentValues);
             if (sql > 0) {
                 response.onSuccess(true);
-                Toast.makeText(MyApp.context, "Thêm mới nhân viên thành công. Mã nhân viên: " + employee.get_id(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MyApp.context, "Thêm mới nhân viên thành công. Tên nhân viên: " + employee.getName(), Toast.LENGTH_LONG).show();
             } else {
                 response.onFailure("Failed to create employee. Unknown Reason!");
             }
@@ -47,38 +49,53 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
         List<Employee> employeeList = new ArrayList<>();
 
         Cursor cursor = null;
-        try{
-            cursor = sqLiteDatabase.query(Constants.EMPLOYEE_TABLE, null,null,null,null,null,null);
-            if(cursor!=null && cursor.moveToFirst()){
+        try {
+            cursor = sqLiteDatabase.query(Constants.EMPLOYEE_TABLE, null, null, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
                 do {
                     Employee employee = getEmployeeFromCursor(cursor);
                     employee.setWorkdays(timeKeepingQuery.readDateCurrentMonthOfEmployee(employee.get_id()));
-                    if(ID_DEPARTMENT!=null ){
-                        if(employee.get_idDepartment().equals(ID_DEPARTMENT))  employeeList.add(employee);
-                    }else employeeList.add(employee);
+                    if (ID_DEPARTMENT != null) {
+                        if (employee.get_idDepartment().equals(ID_DEPARTMENT))
+                            employeeList.add(employee);
+                    } else employeeList.add(employee);
 
                 } while (cursor.moveToNext());
                 DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
 
 
-                for(Employee item:employeeList){
+                for (Employee item : employeeList) {
                     item.setName_department(departmentQuery.readDepartment(item.get_idDepartment()));
                 }
                 response.onSuccess(employeeList);
             } else
                 response.onFailure("There are no employee in database");
-        }catch (Exception e){
+        } catch (Exception e) {
             response.onFailure(e.getMessage());
         } finally {
             sqLiteDatabase.close();
-            if(cursor!=null)
+            if (cursor != null)
                 cursor.close();
         }
     }
 
     @Override
     public void updateEmployee(Employee employee, QueryResponse<Boolean> response) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
 
+        String id = String.valueOf(employee.get_id());
+        ContentValues contentValues = getContentValuesForEmployee(employee);
+        int row = sqLiteDatabase.update(Constants.EMPLOYEE_TABLE,
+                contentValues,
+                Constants.EMPLOYEE_ID + " = ?",
+                new String[]{id});
+        if(row>0){
+            response.onSuccess(true);
+            Toast.makeText(MyApp.context, "Chỉnh sửa thông tin thành công!", Toast.LENGTH_LONG).show();
+        }
+        else{
+            response.onFailure("Không thể thay đổi thông tin nhân viên");
+        }
     }
 
     @Override
@@ -92,13 +109,13 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
         List<Employee> employeeList = new ArrayList<>();
 
         Cursor cursor = null;
-        try{
-            cursor = sqLiteDatabase.query(Constants.EMPLOYEE_TABLE, null,null,null,null,null,null);
-            if(cursor!=null && cursor.moveToFirst()){
+        try {
+            cursor = sqLiteDatabase.query(Constants.EMPLOYEE_TABLE, null, null, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
                 do {
                     Employee employee = getEmployeeFromCursor(cursor);
 
-                    if(employee.get_idDepartment().equals(idDepartment)){
+                    if (employee.get_idDepartment().equals(idDepartment)) {
                         employeeList.add(employee);
                     }
 
@@ -106,11 +123,11 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
                 response.onSuccess(employeeList);
             } else
                 response.onFailure("There are no employee in database");
-        }catch (Exception e){
+        } catch (Exception e) {
             response.onFailure(e.getMessage());
         } finally {
             sqLiteDatabase.close();
-            if(cursor!=null)
+            if (cursor != null)
                 cursor.close();
         }
     }
@@ -122,18 +139,19 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
         List<Employee> employeeList = new ArrayList<>();
 
         Cursor cursor = null;
-        try{
-            cursor = sqLiteDatabase.query(Constants.EMPLOYEE_TABLE, null,null,null,null,null,null);
-            if(cursor!=null && cursor.moveToFirst()){
+        try {
+            cursor = sqLiteDatabase.query(Constants.EMPLOYEE_TABLE, null, null, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
                 do {
                     Employee employee = getEmployeeFromCursor(cursor);
-                    if(employee.get_idDepartment().equals(idDepartment)) count++;
+                    if (employee.get_idDepartment().equals(idDepartment)) count++;
                 } while (cursor.moveToNext());
-            } else{}
-        }catch (Exception e){
+            } else {
+            }
+        } catch (Exception e) {
         } finally {
             sqLiteDatabase.close();
-            if(cursor!=null)
+            if (cursor != null)
                 cursor.close();
         }
         return count;
@@ -145,20 +163,22 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
         contentValues.put(Constants.EMPLOYEE_NAME, employee.getName());
         contentValues.put(Constants.EMPLOYEE_AVATAR, employee.getAvatar());
         contentValues.put(Constants.EMPLOYEE_SALARY, employee.getSalary());
+        contentValues.put(Constants.EMPLOYEE_CREATE_AT, employee.getCreateAt());
         contentValues.put(Constants.EMPLOYEE_ID_DEPARMENT, employee.get_idDepartment());
 
         return contentValues;
     }
 
-    private Employee getEmployeeFromCursor(Cursor cursor){
+    private Employee getEmployeeFromCursor(Cursor cursor) {
         String _ID = cursor.getString(cursor.getColumnIndex(Constants.EMPLOYEE_ID));
         String NAME = cursor.getString(cursor.getColumnIndex(Constants.EMPLOYEE_NAME));
         String AVATAR = cursor.getString(cursor.getColumnIndex(Constants.EMPLOYEE_AVATAR));
+        String CREATE_AT = cursor.getString(cursor.getColumnIndex(Constants.EMPLOYEE_CREATE_AT));
         String ID_DEPARTMENT = cursor.getString(cursor.getColumnIndex(Constants.EMPLOYEE_ID_DEPARMENT));
-        int SALARY =cursor.getInt(cursor.getColumnIndex(Constants.EMPLOYEE_SALARY));
+        int SALARY = cursor.getInt(cursor.getColumnIndex(Constants.EMPLOYEE_SALARY));
 
 
-        return new Employee(_ID,NAME,ID_DEPARTMENT,AVATAR,0,SALARY);
+        return new Employee(_ID, NAME, ID_DEPARTMENT, AVATAR, CREATE_AT, 0, SALARY);
     }
 }
 

@@ -54,6 +54,7 @@ public class EmployeeAdapter extends ArrayAdapter<Employee> {
         ImageView avatarImg = (ImageView)convertView.findViewById(R.id.imageAvatarEmployee) ;
         ImageView btn_editEmployee = (ImageView)convertView.findViewById(R.id.imgEditEmployee);
         ImageView btn_deleteEmployee =(ImageView)convertView.findViewById(R.id.imgDeleteEmployee);
+        TextView tvCreateAt = (TextView) convertView.findViewById(R.id.tvCreateAt);
         btn_editEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +70,7 @@ public class EmployeeAdapter extends ArrayAdapter<Employee> {
 
         Employee dp = data.get(position);
         fullName.setText(dp.getName());
+        tvCreateAt.setText("Tạo ngày: "+dp.getCreateAt());
         avatarImg.setImageURI(Uri.parse(dp.getAvatar()));
         avatarImg.setImageBitmap(BitmapHelper.getBitmapFromURL(dp.getAvatar()));
         Log.e("DEBUG_MSG image emp",dp.getAvatar());

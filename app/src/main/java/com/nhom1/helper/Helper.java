@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Helper {
+
     public static String getCurrentFromNumber(int number) {
         NumberFormat format = NumberFormat.getCurrencyInstance();
         format.setMaximumFractionDigits(0);
@@ -18,6 +19,17 @@ public class Helper {
 
         String num = format.format(number);
         return num;
+    }
+
+    public static String getCurrentTime(){
+
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR);
+        int minute = c.get(Calendar.MINUTE);
+        int second = c.get(Calendar.SECOND);
+        String time = hour+":"+minute+":"+second;
+        return time;
+
     }
 
     public static String getCurrentDate() {

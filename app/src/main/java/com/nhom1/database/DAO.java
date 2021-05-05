@@ -2,6 +2,7 @@ package com.nhom1.database;
 
 import com.nhom1.models.Department;
 import com.nhom1.models.Employee;
+import com.nhom1.models.Timekeeping;
 
 import java.util.List;
 
@@ -24,7 +25,11 @@ public class DAO {
         void deleteDepartment(Department department,QueryResponse<Boolean> response);
     }
     public interface TimeKeepingQuery{
-        void addTimeKeeping(String idEmployee,QueryResponse<Boolean> response);
+        void addCheckInTimeKeeping(String idEmployee,QueryResponse<Boolean> response);
+        void isCheckIn(String idEmployee,QueryResponse<Boolean> response);
+        void addCheckOutTimeKeeping(String idEmployee,QueryResponse<Boolean> response);
+        void isCheckOut(String idEmployee,QueryResponse<Boolean> response);
+        void getIdTimeKeepingToday(String idEmployee,QueryResponse<Timekeeping> response);
         void checkTimeKeepingForEmployee(String idEmployee,QueryResponse<Boolean> response);
         int readDateCurrentMonthOfEmployee(String idEmployee);
     }

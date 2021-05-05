@@ -1,15 +1,39 @@
 package com.nhom1.models;
 
 public class Timekeeping {
-    private String date,idEmployee,_id;
+    private String date,idEmployee,_id,startAt,endAt;
 
     public Timekeeping() {
+    }
+
+    public Timekeeping(String date, String idEmployee, String _id, String startAt, String endAt) {
+        this.date = date;
+        this.idEmployee = idEmployee;
+        this._id = _id;
+        this.startAt = startAt;
+        this.endAt = endAt;
     }
 
     public Timekeeping(String date, String idEmployee, String _id) {
         this.date = date;
         this.idEmployee = idEmployee;
         this._id = _id;
+    }
+
+    public String getStartAt() {
+        return startAt;
+    }
+
+    public void setStartAt(String startAt) {
+        this.startAt = startAt;
+    }
+
+    public String getEndAt() {
+        return endAt;
+    }
+
+    public void setEndAt(String endAt) {
+        this.endAt = endAt;
     }
 
     public String getDate() {
