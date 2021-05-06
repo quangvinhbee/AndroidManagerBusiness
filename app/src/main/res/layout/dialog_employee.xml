@@ -18,12 +18,14 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/close" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imgAvatarEmployee"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/uploadavatar" />
+            android:src="@drawable/exampleemployee"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/colorPrimary"/>
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"

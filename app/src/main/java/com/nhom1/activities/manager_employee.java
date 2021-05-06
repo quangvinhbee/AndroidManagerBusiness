@@ -2,11 +2,15 @@ package com.nhom1.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,9 +21,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.managerbusiness.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.nhom1.adapter.EmployeeAdapter;
 import com.nhom1.database.DAO;
 import com.nhom1.database.DAOimplement.DepartmentQuery;
@@ -28,6 +37,7 @@ import com.nhom1.database.DAOimplement.TimeKeepingQuery;
 import com.nhom1.database.QueryResponse;
 import com.nhom1.helper.Helper;
 import com.nhom1.models.Employee;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,9 +56,12 @@ public class manager_employee extends AppCompatActivity {
     DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
     DAO.TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
 
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_employee);
         Intent intent = getIntent();
@@ -74,6 +87,9 @@ public class manager_employee extends AppCompatActivity {
             @Override
             public void onSuccess(List<Employee> listEmployee) {
                 data = listEmployee;
+                for(Employee emp:listEmployee){
+                    Log.e("LogE",emp.getAvatar());
+                }
             }
 
             @Override
@@ -175,6 +191,22 @@ public class manager_employee extends AppCompatActivity {
                         @Override
                         public void onFailure(String message) {
 
+                        }
+                    });
+                    Picasso.get()
+                            .load(employee.getAvatar())
+                            .into(imgAvt);
+
+                    storageRef.child("images/"+employee.get_id()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                            imgAvt.setImageURI(uri);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
                         }
                     });
 

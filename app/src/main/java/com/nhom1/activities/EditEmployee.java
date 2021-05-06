@@ -1,9 +1,11 @@
 package com.nhom1.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,9 +16,18 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.managerbusiness.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.nhom1.database.DAO;
 import com.nhom1.database.DAOimplement.DepartmentQuery;
 import com.nhom1.database.DAOimplement.EmployeeQuery;
@@ -24,6 +35,7 @@ import com.nhom1.database.DAOimplement.TimeKeepingQuery;
 import com.nhom1.database.QueryResponse;
 import com.nhom1.models.Department;
 import com.nhom1.models.Employee;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,6 +52,9 @@ public class EditEmployee extends AppCompatActivity {
     ImageView AvatarUpload;
     Uri imgUri;
     int position;
+
+    FirebaseStorage storage;
+    StorageReference storageReference;
     DAO.EmployeeQuery employeeQuery = new EmployeeQuery();
     DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
     DAO.TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
@@ -48,6 +63,10 @@ public class EditEmployee extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_employee);
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         Intent intent = getIntent();
         employee = (Employee) intent.getSerializableExtra("key_Employee");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // set action bar
@@ -59,6 +78,9 @@ public class EditEmployee extends AppCompatActivity {
 
     void setEvent() {
         chooseDepartment();
+        Picasso.get()
+                .load(employee.getAvatar())
+                .into(AvatarUpload);
         edtFullName.setText(employee.getName());
         edtSalary.setText(String.valueOf(employee.getSalary()));
         btnEdit.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +104,32 @@ public class EditEmployee extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        AvatarUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChooseImage();
+            }
+        });
+    }
+    private void ChooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imgUri = data.getData();
+            AvatarUpload.setImageURI(imgUri);
+            uploadPicture();
+        }
     }
 
+
     void setControl() {
-        AvatarUpload = findViewById(R.id.imgAddUploadAvatar);
+        AvatarUpload = findViewById(R.id.imageView_userIcon12);
         spinner = findViewById(R.id.spinnerListDepartment_Edit);
         edtFullName = findViewById(R.id.editEditNameEmployee);
         edtSalary = findViewById(R.id.editEditSalaryEmployee);
@@ -134,6 +178,45 @@ public class EditEmployee extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void uploadPicture() {
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Đang tải ảnh lên ...");
+        pd.show();
+        StorageReference riversRef = storageReference.child("images/" + employee.get_id());
+        riversRef.putFile(imgUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
+                        result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                pd.dismiss();
+                                Toast.makeText(EditEmployee.this, "Đã tải ảnh lên", Toast.LENGTH_LONG).show();
+                                String imgURL = uri.toString();
+                                employee.setAvatar(imgURL);
+                                Log.e("Firebase message", "Thêm firebase thành công " + imgURL);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(EditEmployee.this, "Tải ảnh lên thất bại", Toast.LENGTH_LONG).show();
+                        Log.e("Firebase message", "Thêm firebase thất bại");
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        pd.setMessage("Còn " + (int) progressPercent + "% nữa hoàn thành");
+                    }
+                });
     }
 
     @Override

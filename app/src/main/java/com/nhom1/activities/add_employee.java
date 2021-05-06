@@ -50,6 +50,7 @@ public class add_employee extends AppCompatActivity {
     Uri imgUri;
     FirebaseStorage storage;
     StorageReference storageReference;
+    String uid = UUID.randomUUID().toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,6 @@ public class add_employee extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String uid = UUID.randomUUID().toString();
                 employee.set_id(uid);
                 employee.setWorkdays(0);
                 employee.setName(edtFullname.getText().toString());
@@ -202,8 +202,7 @@ public class add_employee extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Đang tải ảnh lên ...");
         pd.show();
-        final String randomKey = UUID.randomUUID().toString();
-        StorageReference riversRef = storageReference.child("images/" + randomKey);
+        StorageReference riversRef = storageReference.child("images/" + uid);
         riversRef.putFile(imgUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
