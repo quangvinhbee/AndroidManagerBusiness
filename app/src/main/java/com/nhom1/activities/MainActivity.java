@@ -52,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,manager_employee.class));
             }
         });
+        btn_statistical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,ranking.class));
+            }
+        });
     }
 
 }

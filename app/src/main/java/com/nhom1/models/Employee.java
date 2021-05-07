@@ -7,6 +7,39 @@ import java.io.Serializable;
 public class Employee implements Serializable {
     private String _id,name,position,_idDepartment,avatar,name_department,createAt;
     private Uri avatarUri;
+    private int lateWork,workontime;
+
+    public int getLateWork() {
+        return lateWork;
+    }
+
+    public void setLateWork(int lateWork) {
+        this.lateWork = lateWork;
+    }
+
+    public int getWorkontime() {
+        return workontime;
+    }
+
+    public void setWorkontime(int workontime) {
+        this.workontime = workontime;
+    }
+
+    public Employee(String _id, String name, String position, String _idDepartment, String avatar, String name_department, String createAt, Uri avatarUri, int lateWork, int workontime, int workdays, int salary) {
+        this._id = _id;
+        this.name = name;
+        this.position = position;
+        this._idDepartment = _idDepartment;
+        this.avatar = avatar;
+        this.name_department = name_department;
+        this.createAt = createAt;
+        this.avatarUri = avatarUri;
+        this.lateWork = lateWork;
+        this.workontime = workontime;
+        this.workdays = workdays;
+        this.salary = salary;
+    }
+
     private int workdays;
     private int salary;
 

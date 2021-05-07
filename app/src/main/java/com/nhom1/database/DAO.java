@@ -29,6 +29,8 @@ public class DAO {
         void isCheckIn(String idEmployee,QueryResponse<Boolean> response);
         void addCheckOutTimeKeeping(String idEmployee,QueryResponse<Boolean> response);
         void isCheckOut(String idEmployee,QueryResponse<Boolean> response);
+        int countDayWorkLate(String idEmployee);
+        int countWorkOnDay(String idEmployee);
         void getIdTimeKeepingToday(String idEmployee,QueryResponse<Timekeeping> response);
         void checkTimeKeepingForEmployee(String idEmployee,QueryResponse<Boolean> response);
         int readDateCurrentMonthOfEmployee(String idEmployee);

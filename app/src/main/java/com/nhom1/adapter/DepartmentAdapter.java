@@ -57,7 +57,8 @@ public class DepartmentAdapter extends ArrayAdapter<Department> {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((manager_department)context).DeleteSelectedItemListView(position);
+                View child = parent.getChildAt(position);
+                ((manager_department)context).DeleteSelectedItemListView(position,child);
             }
         });
         btnEdit.setOnClickListener(new View.OnClickListener() {

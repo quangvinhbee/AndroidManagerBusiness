@@ -55,6 +55,8 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
                 do {
                     Employee employee = getEmployeeFromCursor(cursor);
                     employee.setWorkdays(timeKeepingQuery.readDateCurrentMonthOfEmployee(employee.get_id()));
+                    employee.setLateWork(timeKeepingQuery.countDayWorkLate(employee.get_id()));
+                    employee.setWorkontime(timeKeepingQuery.countWorkOnDay(employee.get_id()));
                     if (ID_DEPARTMENT != null) {
                         if (employee.get_idDepartment().equals(ID_DEPARTMENT))
                             employeeList.add(employee);
@@ -62,8 +64,6 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
 
                 } while (cursor.moveToNext());
                 DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
-
-
                 for (Employee item : employeeList) {
                     item.setName_department(departmentQuery.readDepartment(item.get_idDepartment()));
                 }
@@ -100,7 +100,16 @@ public class EmployeeQuery implements DAO.EmployeeQuery {
 
     @Override
     public void deleteEmployee(Employee employee, QueryResponse<Boolean> response) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        int row = sqLiteDatabase.delete(Constants.EMPLOYEE_TABLE, Constants.EMPLOYEE_ID+" = ?",new String[]{String.valueOf(employee.get_id())});
 
+        if(row>0){
+            response.onSuccess(true);
+            Toast.makeText(MyApp.context, "Đã xóa thông tin nhân viên!", Toast.LENGTH_LONG).show();
+        }
+        else{
+            response.onFailure("Không thể xóa thông tin nhân viên!");
+        }
     }
 
     @Override

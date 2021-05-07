@@ -62,7 +62,8 @@ public class EmployeeAdapter extends ArrayAdapter<Employee> {
         btn_deleteEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((manager_employee) context).DeleteSelectedItemListView(position);
+                View child = parent.getChildAt(position);
+                ((manager_employee) context).DeleteSelectedItemListView(position,child);
             }
         });
 

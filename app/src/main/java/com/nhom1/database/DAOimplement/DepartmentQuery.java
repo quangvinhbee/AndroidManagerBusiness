@@ -111,7 +111,16 @@ public class DepartmentQuery implements DAO.DepartmentQuery {
 
     @Override
     public void deleteDepartment(Department department, QueryResponse<Boolean> response) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        int row = sqLiteDatabase.delete(Constants.DEPARMENT_TABLE, Constants.DEPARMENT_ID+" = ?",new String[]{String.valueOf(department.get_id())});
 
+        if(row>0){
+            response.onSuccess(true);
+            Toast.makeText(MyApp.context, "Đã xóa thông tin Phòng ban!", Toast.LENGTH_LONG).show();
+        }
+        else{
+            response.onFailure("Không thể xóa thông tin Phòng ban!");
+        }
     }
 
     private ContentValues getContentValuesForDepartment(Department department) {

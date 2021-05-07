@@ -5,11 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,9 +21,12 @@ import com.example.managerbusiness.R;
 import com.nhom1.adapter.DepartmentAdapter;
 import com.nhom1.database.DAO;
 import com.nhom1.database.DAOimplement.DepartmentQuery;
+import com.nhom1.database.DAOimplement.EmployeeQuery;
+import com.nhom1.database.DAOimplement.TimeKeepingQuery;
 import com.nhom1.database.QueryResponse;
 import com.nhom1.models.Department;
 import com.nhom1.models.Employee;
+import com.nhom1.untils.MyApp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,6 +39,12 @@ public class manager_department extends AppCompatActivity {
     List<Department> data = new ArrayList<>();
     AlertDialog.Builder builder;
     DepartmentAdapter adapter;
+    Animation ainm_left_to_right;
+
+
+    DAO.EmployeeQuery employeeQuery = new EmployeeQuery();
+    DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
+    DAO.TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,14 +75,46 @@ public class manager_department extends AppCompatActivity {
         intent.putExtra("key_Department", (Serializable) data.get(position));
         startActivity(intent);
     }
-    public void DeleteSelectedItemListView(int position){
+    public void DeleteSelectedItemListView(int position,View view){
+
+        ainm_left_to_right = AnimationUtils.loadAnimation(manager_department.this, R.anim.left_to_right);
+        ainm_left_to_right.setStartOffset(200);
+        ainm_left_to_right.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Log.e("DEBUG_ADDEMP", "DEBUG_ADDEMP");
+                departmentQuery.deleteDepartment(data.get(position), new QueryResponse<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean data) {
+                        Toast.makeText(MyApp.context, "Đã xóa thông tin Phòng ban!", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+
+                    }
+                });
+                data.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
         builder = new AlertDialog.Builder(this);
         builder.setMessage("Bạn có muốn xóa vĩnh viễn phòng ban mã "+data.get(position).get_id() +" ?")
                 .setCancelable(false)
                 .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        data.remove(position);
-                        adapter.notifyDataSetChanged();
+                        view.startAnimation(ainm_left_to_right);
                     }
                 })
                 .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {

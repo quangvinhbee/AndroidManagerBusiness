@@ -98,7 +98,7 @@ public class TimeKeepingQuery implements DAO.TimeKeepingQuery {
             String query = "select * from " + Constants.TIMEKEEPING_TABLE + " WHERE (" + Constants.TIMEKEEPING_ID_EMPLOYEE + "='" + idEmployee + "' AND "
                     + Constants.TIMEKEEPING_DATE + "='" + Helper.getCurrentDate() + "')";
             cursor = sqLiteDatabase.rawQuery(query, null);
-            if (cursor != null && cursor.moveToFirst() && cursor.getString(cursor.getColumnIndex(Constants.TIMEKEEPING_ENDAT))!=null) {
+            if (cursor != null && cursor.moveToFirst() && cursor.getString(cursor.getColumnIndex(Constants.TIMEKEEPING_ENDAT)) != null) {
                 response.onSuccess(true);
             } else {
                 response.onFailure("Nhân viên chưa CheckOut");
@@ -111,6 +111,66 @@ public class TimeKeepingQuery implements DAO.TimeKeepingQuery {
             if (cursor != null)
                 cursor.close();
         }
+    }
+
+    @Override
+    public int countDayWorkLate(String idEmployee) {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+        String query = "select * from " + Constants.TIMEKEEPING_TABLE + " WHERE " + Constants.TIMEKEEPING_ID_EMPLOYEE + "='" + idEmployee + "'";
+        try {
+            cursor = sqLiteDatabase.rawQuery(query, null);
+            // cursor = sqLiteDatabase.query(Constants.TIMEKEEPING_TABLE, null,null,null,null,null,null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Timekeeping timekeeping = getTimeKeepingFromCursor(cursor);
+                    if (Helper.checkDateInCurrentMonth(timekeeping.getDate())) {
+                        if (Helper.check8hours(timekeeping.getStartAt(), timekeeping.getEndAt()))
+                            count++;
+                    }
+
+                } while (cursor.moveToNext());
+            } else {
+            }
+        } catch (Exception e) {
+        } finally {
+            sqLiteDatabase.close();
+            if (cursor != null)
+                cursor.close();
+        }
+        return count;
+    }
+
+    @Override
+    public int countWorkOnDay(String idEmployee) {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+        String query = "select * from " + Constants.TIMEKEEPING_TABLE + " WHERE " + Constants.TIMEKEEPING_ID_EMPLOYEE + "='" + idEmployee + "'";
+        try {
+            cursor = sqLiteDatabase.rawQuery(query, null);
+            // cursor = sqLiteDatabase.query(Constants.TIMEKEEPING_TABLE, null,null,null,null,null,null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Timekeeping timekeeping = getTimeKeepingFromCursor(cursor);
+                    if (Helper.checkDateInCurrentMonth(timekeeping.getDate())) {
+                        if (!Helper.check8hours(timekeeping.getStartAt(), timekeeping.getEndAt()))
+                            count++;
+                    }
+
+                } while (cursor.moveToNext());
+            } else {
+            }
+        } catch (Exception e) {
+        } finally {
+            sqLiteDatabase.close();
+            if (cursor != null)
+                cursor.close();
+        }
+        return count;
     }
 
     @Override
