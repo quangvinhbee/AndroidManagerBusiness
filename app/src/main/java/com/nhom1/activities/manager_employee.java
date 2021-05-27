@@ -2,10 +2,15 @@ package com.nhom1.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,11 +27,18 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.managerbusiness.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.nhom1.adapter.EmployeeAdapter;
 import com.nhom1.database.DAO;
 import com.nhom1.database.DAOimplement.DepartmentQuery;
@@ -38,11 +50,17 @@ import com.nhom1.models.Employee;
 import com.nhom1.untils.MyApp;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class manager_employee extends AppCompatActivity {
+
+    private static final int GALLERY_REQUEST = 1;
+
+    private static final int CAMERA_REQUEST_CODE = 1;
 
     ListView lvEmployee;
     LinearLayout btn_addEmployee;
@@ -51,14 +69,23 @@ public class manager_employee extends AppCompatActivity {
     AlertDialog.Builder builder;
     EditText searchEmployee;
     String ID_Department;
+    Employee employee;
+
+    final Boolean[] checkin = {false};
+    final Boolean[] checkout = {false};
     int totalWorkdays = 0;
+
+    Button btn_timekeeping_StartAt, btn_timekeeping_EndAt;
     DAO.EmployeeQuery employeeQuery = new EmployeeQuery();
     DAO.DepartmentQuery departmentQuery = new DepartmentQuery();
     DAO.TimeKeepingQuery timeKeepingQuery = new TimeKeepingQuery();
 
+    private Uri imgCapture = null;
+
+
     Animation ainm_left_to_right;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
+    StorageReference storageReference = storage.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +103,8 @@ public class manager_employee extends AppCompatActivity {
         if (ID_Department != null) {
             getSupportActionBar().setTitle(departmentQuery.readDepartment(ID_Department));
         }
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         Init();
         setControl();
@@ -186,9 +215,8 @@ public class manager_employee extends AppCompatActivity {
             @SuppressLint("ResourceAsColor")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Boolean[] checkin = {false};
-                final Boolean[] checkout = {false};
-                Employee employee = data.get(position);
+
+                employee = data.get(position);
                 final Boolean[] check = {false};
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(manager_employee.this);
                 View mView = getLayoutInflater().inflate(R.layout.dialog_employee, null);
@@ -196,12 +224,12 @@ public class manager_employee extends AppCompatActivity {
                 TextView tvDpEmployee = (TextView) mView.findViewById(R.id.tvDpEmployee);
                 TextView tvTotalWorkdays = (TextView) mView.findViewById(R.id.tvTotalWorkdays);
 
-                LinearLayout btn_detail_salary = (LinearLayout)mView.findViewById(R.id.btn_view_detail_salary);
+                LinearLayout btn_detail_salary = (LinearLayout) mView.findViewById(R.id.btn_view_detail_salary);
                 TextView tvSalary = (TextView) mView.findViewById(R.id.tvSalaryEmployee);
                 ImageView imgAvt = mView.findViewById(R.id.imgAvatarEmployee);
                 ImageView btn_close = mView.findViewById(R.id.button_closeDialogEmployee);
-                Button btn_timekeeping_StartAt = mView.findViewById(R.id.button_TimeKeeping_StartAt);
-                Button btn_timekeeping_EndAt = mView.findViewById(R.id.button_TimeKeeping_EndAt);
+                btn_timekeeping_StartAt = mView.findViewById(R.id.button_TimeKeeping_StartAt);
+                btn_timekeeping_EndAt = mView.findViewById(R.id.button_TimeKeeping_EndAt);
                 totalWorkdays = timeKeepingQuery.readDateCurrentMonthOfEmployee(employee.get_id());
                 if (employee != null) { // set data
                     timeKeepingQuery.isCheckIn(employee.get_id(), new QueryResponse<Boolean>() {
@@ -264,23 +292,10 @@ public class manager_employee extends AppCompatActivity {
                 btn_timekeeping_StartAt.setOnClickListener(new View.OnClickListener() { // check In
                     @Override
                     public void onClick(View v) {
-                        if (!checkin[0])
-                            timeKeepingQuery.addCheckInTimeKeeping(employee.get_id(), new QueryResponse<Boolean>() {
-                                @Override
-                                public void onSuccess(Boolean data) {
-                                    if (data) {
-                                        Init();
-                                        adapter.notifyDataSetChanged();
-                                        btn_timekeeping_StartAt.setEnabled(!data);
-                                        Toast.makeText(manager_employee.this, "CheckIn thành công!", Toast.LENGTH_LONG);
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(String message) {
-
-                                }
-                            });
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivityForResult(intent, CAMERA_REQUEST_CODE);
+                        }
                     }
                 });
                 btn_timekeeping_EndAt.setOnClickListener(new View.OnClickListener() { // check out
@@ -349,7 +364,7 @@ public class manager_employee extends AppCompatActivity {
                 });
                 break;
             case R.id.addEmployee:
-                intent = new Intent(manager_employee.this, add_employee.class);
+                intent = new Intent(manager_employee.this, manager_employee.class);
                 startActivity(intent);
                 break;
             case android.R.id.home:
@@ -364,5 +379,83 @@ public class manager_employee extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String uid = UUID.randomUUID().toString();
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK ) {
+            Bundle extras = data.getExtras();
+            Uri uri = data.getData();
+            if(uri!=null){
+                uploadPicture(uid,uri);
+            }
+
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            imgCapture = getImageUri(getApplicationContext(), imageBitmap);
+//
+            if (!checkin[0])
+                timeKeepingQuery.addCheckInTimeKeeping(employee.get_id(), new QueryResponse<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean data) {
+                        if (data) {
+                            Init();
+                            adapter.notifyDataSetChanged();
+                            btn_timekeeping_StartAt.setEnabled(!data);
+                            Toast.makeText(manager_employee.this, "CheckIn thành công!", Toast.LENGTH_LONG);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+
+                    }
+                }, uid);
+        }
+    }
+
+    private void uploadPicture(String uid,Uri uri) {
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Đang tải ảnh lên ...");
+        pd.show();
+        StorageReference riversRef = storageReference.child("images/" + uid);
+        riversRef.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
+                        result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                pd.dismiss();
+                                Toast.makeText(manager_employee.this, "Đã tải ảnh lên", Toast.LENGTH_LONG).show();
+                                String imgURL = uri.toString();
+                                Log.e("Firebase message", "Thêm firebase thành công " + imgURL);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(manager_employee.this, "Tải ảnh lên thất bại", Toast.LENGTH_LONG).show();
+                        Log.e("Firebase message", "Thêm firebase thất bại");
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        pd.setMessage("Còn " + (int) progressPercent + "% nữa hoàn thành");
+                    }
+                });
+    }
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 
 }

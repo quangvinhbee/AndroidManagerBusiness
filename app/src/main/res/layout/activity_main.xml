@@ -149,30 +149,7 @@
                     android:text="@string/manager_employee" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/timekeeping"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_margin="10dp"
-                android:elevation="5dp"
-                android:background="@drawable/pressed"
-                android:clickable="true"
-                android:gravity="center"
-                android:orientation="vertical"
 
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/accounting" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/acounting" />
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/statistical"

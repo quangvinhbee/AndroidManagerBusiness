@@ -77,44 +77,44 @@ public class manager_department extends AppCompatActivity {
     }
     public void DeleteSelectedItemListView(int position,View view){
 
-        ainm_left_to_right = AnimationUtils.loadAnimation(manager_department.this, R.anim.left_to_right);
-        ainm_left_to_right.setStartOffset(200);
-        ainm_left_to_right.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Log.e("DEBUG_ADDEMP", "DEBUG_ADDEMP");
-                departmentQuery.deleteDepartment(data.get(position), new QueryResponse<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean data) {
-                        Toast.makeText(MyApp.context, "Đã xóa thông tin Phòng ban!", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(String message) {
-
-                    }
-                });
-                data.remove(position);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
+//        ainm_left_to_right = AnimationUtils.loadAnimation(manager_department.this, R.anim.left_to_right);
+//        ainm_left_to_right.setStartOffset(200);
+//        ainm_left_to_right.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                Log.e("DEBUG_ADDEMP", "DEBUG_ADDEMP");
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
 
         builder = new AlertDialog.Builder(this);
         builder.setMessage("Bạn có muốn xóa vĩnh viễn phòng ban mã "+data.get(position).get_id() +" ?")
                 .setCancelable(false)
                 .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        view.startAnimation(ainm_left_to_right);
+                        departmentQuery.deleteDepartment(data.get(position), new QueryResponse<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean data) {
+                                Toast.makeText(MyApp.context, "Đã xóa thông tin Phòng ban!", Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+
+                            }
+                        });
+                        data.remove(position);
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {

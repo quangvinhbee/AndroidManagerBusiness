@@ -25,7 +25,7 @@ public class DAO {
         void deleteDepartment(Department department,QueryResponse<Boolean> response);
     }
     public interface TimeKeepingQuery{
-        void addCheckInTimeKeeping(String idEmployee,QueryResponse<Boolean> response);
+        void addCheckInTimeKeeping(String idEmployee,QueryResponse<Boolean> response,String uid);
         void isCheckIn(String idEmployee,QueryResponse<Boolean> response);
         void addCheckOutTimeKeeping(String idEmployee,QueryResponse<Boolean> response);
         void isCheckOut(String idEmployee,QueryResponse<Boolean> response);

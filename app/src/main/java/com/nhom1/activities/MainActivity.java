@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     void setControl(){
         btn_department = findViewById(R.id.mn_department);
         btn_employee = findViewById(R.id.mn_employee);
-        btn_timekeeping = findViewById(R.id.timekeeping);
         btn_statistical = findViewById(R.id.statistical);
         btn_nhom1 = findViewById(R.id.nhom1);
         btn_exit = findViewById(R.id.exit);

@@ -24,11 +24,11 @@ public class TimeKeepingQuery implements DAO.TimeKeepingQuery {
 
 
     @Override
-    public void addCheckInTimeKeeping(String idEmployee, QueryResponse<Boolean> response) {
+    public void addCheckInTimeKeeping(String idEmployee, QueryResponse<Boolean> response,String uid) {
         Timekeeping timekeeping = new Timekeeping();
         String date = Helper.getCurrentDate();
         String hour = Helper.getCurrentTime();
-        String uid = UUID.randomUUID().toString();
+
         timekeeping.set_id(uid);
         timekeeping.setDate(date);
         timekeeping.setStartAt(hour);
