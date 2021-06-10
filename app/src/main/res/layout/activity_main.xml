@@ -20,17 +20,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal"
             android:background="@drawable/header_home">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:letterSpacing="0.05"
                 android:paddingTop="10dp"
@@ -40,8 +42,16 @@
                 android:textSize="30dp"
                 android:textStyle="bold" />
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageAvatarMainActivity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/exampleemployee"
+                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_width="1dp" />
 
-        </RelativeLayout>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
@@ -121,6 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
                     android:text="@string/manager_department" />
             </LinearLayout>
 
@@ -146,6 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
                     android:text="@string/manager_employee" />
             </LinearLayout>
 
@@ -173,7 +185,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
                     android:text="@string/statistical" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/notification"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="10dp"
+                android:elevation="5dp"
+                android:background="@drawable/pressed"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/bell" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
+                    android:text="@string/notification" />
             </LinearLayout>
 
             <LinearLayout
@@ -198,8 +237,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
                     android:text="@string/nhom_1" />
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/exit"
@@ -223,6 +264,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
                     android:text="@string/exit" />
             </LinearLayout>
 

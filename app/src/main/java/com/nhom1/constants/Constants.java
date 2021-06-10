@@ -46,4 +46,13 @@ public class Constants {
             +")";
 
 
+    public static final  String USER_TABLE = "User_tb";
+    public static final  String USER_USERNAME = "User_USERNAME";
+    public static final  String USER_PASSWORD = "User_PASSWORD";
+    public static final String CREATE_TABLE_USER = "CREATE TABLE " + Constants.USER_TABLE + "("
+            +Constants.USER_USERNAME+ " TEXT PRIMARY KEY, "
+            +Constants.USER_PASSWORD+" TEXT, "
+            +")";
+
+
 }

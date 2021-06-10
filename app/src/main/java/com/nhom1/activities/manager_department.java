@@ -49,7 +49,6 @@ public class manager_department extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_department);
-
         Intent intent = getIntent();
         Department departmentAdd = (Department)intent.getSerializableExtra("key_DepartmentAdd");
         Department departmentEdit = (Department)intent.getSerializableExtra("key_DepartmentEdit");
@@ -60,7 +59,6 @@ public class manager_department extends AppCompatActivity {
         if(departmentAdd!=null){
             data.add(departmentAdd);
         }
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // set action bar
         getSupportActionBar().setTitle("Quản Lí Phòng Ban");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xff78CFFD));
@@ -76,27 +74,6 @@ public class manager_department extends AppCompatActivity {
         startActivity(intent);
     }
     public void DeleteSelectedItemListView(int position,View view){
-
-//        ainm_left_to_right = AnimationUtils.loadAnimation(manager_department.this, R.anim.left_to_right);
-//        ainm_left_to_right.setStartOffset(200);
-//        ainm_left_to_right.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                Log.e("DEBUG_ADDEMP", "DEBUG_ADDEMP");
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
-
         builder = new AlertDialog.Builder(this);
         builder.setMessage("Bạn có muốn xóa vĩnh viễn phòng ban mã "+data.get(position).get_id() +" ?")
                 .setCancelable(false)
@@ -128,7 +105,6 @@ public class manager_department extends AppCompatActivity {
         //Setting the title manually
         alert.setTitle("Xác nhận xóa phòng ban");
         alert.show();
-
     }
 
     void setControl() {

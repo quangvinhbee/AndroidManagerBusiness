@@ -139,7 +139,7 @@ public class manager_employee extends AppCompatActivity {
         //set animation
         ainm_left_to_right = AnimationUtils.loadAnimation(manager_employee.this, R.anim.left_to_right);
         ainm_left_to_right.setStartOffset(200);
-        ainm_left_to_right.setAnimationListener(new Animation.AnimationListener() {
+        ainm_left_to_right.setAnimationListener(new Animation.AnimationListener() { //xử lí animation
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -364,7 +364,7 @@ public class manager_employee extends AppCompatActivity {
                 });
                 break;
             case R.id.addEmployee:
-                intent = new Intent(manager_employee.this, manager_employee.class);
+                intent = new Intent(manager_employee.this, add_employee.class);
                 startActivity(intent);
                 break;
             case android.R.id.home:

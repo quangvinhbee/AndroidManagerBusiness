@@ -27,13 +27,15 @@
             android:parentActivityName="com.nhom1.activities.MainActivity" />
         <activity
             android:name="com.nhom1.activities.Login"
-            android:parentActivityName="com.nhom1.activities.MainActivity" />
-        <activity android:name="com.nhom1.activities.MainActivity">
+            android:parentActivityName="com.nhom1.activities.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name="com.nhom1.activities.MainActivity">
+
         </activity>
 
     </application>

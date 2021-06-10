@@ -3,6 +3,7 @@ package com.nhom1.database;
 import com.nhom1.models.Department;
 import com.nhom1.models.Employee;
 import com.nhom1.models.Timekeeping;
+import com.nhom1.models.User;
 
 import java.util.List;
 
@@ -34,5 +35,11 @@ public class DAO {
         void getIdTimeKeepingToday(String idEmployee,QueryResponse<Timekeeping> response);
         void checkTimeKeepingForEmployee(String idEmployee,QueryResponse<Boolean> response);
         int readDateCurrentMonthOfEmployee(String idEmployee);
+    }
+
+    public interface UserQuery{
+        void addUser(String username, String password, QueryResponse<Boolean> response);
+        User getUser();
+        void deleteUser(String username, QueryResponse<Boolean> response);
     }
 }

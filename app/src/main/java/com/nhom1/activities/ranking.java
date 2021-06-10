@@ -27,6 +27,7 @@ import org.eazegraph.lib.models.PieModel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class ranking extends AppCompatActivity {
 
@@ -118,26 +119,17 @@ public class ranking extends AppCompatActivity {
 
         month.setText("Nhân viên có thành tích xuất sắc nhất tháng "+month1);
 
-        pieChart.addPieSlice(
-                new PieModel(
-                        "R",
-                        12,
-                        Color.parseColor("#FFA726")));
-        pieChart.addPieSlice(
-                new PieModel(
-                        "Python",
-                        13,
-                        Color.parseColor("#66BB6A")));
-        pieChart.addPieSlice(
-                new PieModel(
-                        "C++",
-                        16,
-                        Color.parseColor("#EF5350")));
-        pieChart.addPieSlice(
-                new PieModel(
-                        "Java",
-                        62,
-                        Color.parseColor("#29B6F6")));
+//        for(Employee employee:data){
+//            Random obj = new Random();
+//            int rand_num = obj.nextInt(0xffffff + 1);
+//            String colorCode = String.format("#%06x", rand_num);
+//            pieChart.addPieSlice(
+//                    new PieModel(
+//                            employee.getName(),
+//                            employee.getSalary(),
+//                            Color.parseColor(colorCode)));
+//        }
+
 
         // To animate the pie chart
         pieChart.startAnimation();
