@@ -1,9 +1,7 @@
 package com.nhom1.activities;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.managerbusiness.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.nhom1.authentication.AuthenticationFirebase;
+import com.nhom1.firebase.AuthenticationFirebase;
 import com.nhom1.database.QueryResponse;
 
 public class Login extends AppCompatActivity {

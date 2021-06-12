@@ -1,4 +1,4 @@
-package com.nhom1.authentication;
+package com.nhom1.firebase;
 
 
 import android.util.Log;

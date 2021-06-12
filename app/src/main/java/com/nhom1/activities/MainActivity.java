@@ -3,6 +3,7 @@ package com.nhom1.activities;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,8 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btn_department, btn_employee, btn_timekeeping, btn_statistical, btn_nhom1, btn_exit;
     private ImageView imgAvt;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-    private boolean isAdmin;
+    private boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,9 @@ public class MainActivity extends AppCompatActivity {
         this.getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         dbHelper = new DbHelper();
+
         if (user != null) {
-            if (user.getEmail() == "admin@gmail.com") {
+            if (user.getEmail().equals("admin@gmail.com")) {
                 isAdmin = true;
             } else {
                 isAdmin = false;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        Log.w("DEBUG",user.getEmail() + isAdmin);
         setControl();
         setEvent();
     }
@@ -81,6 +83,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ranking.class));
+            }
+        });
+
+        btn_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainActivity.this, Login.class);
+                startActivity(intent);
             }
         });
     }
