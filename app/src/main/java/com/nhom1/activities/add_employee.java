@@ -32,8 +32,10 @@ import com.nhom1.database.DAO;
 import com.nhom1.database.DAOimplement.DepartmentQuery;
 import com.nhom1.database.DAOimplement.EmployeeQuery;
 import com.nhom1.database.QueryResponse;
+import com.nhom1.firebase.AuthenticationFirebase;
 import com.nhom1.models.Department;
 import com.nhom1.models.Employee;
+import com.nhom1.untils.MyApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +47,10 @@ public class add_employee extends AppCompatActivity {
     Spinner spinner;
     Button btnAdd;
     Employee employee = new Employee();
-    EditText edtFullname, edtSalary;
+    EditText edtFullname, edtSalary, edtEmail, edtPassword, edtRePassword;
     ImageView AvatarUpload;
-    Uri imgUri;
+    Uri imgUri = Uri.parse("https://i.imgur.com/kSbCAMT.png");
+    String email, password, repassword;
     FirebaseStorage storage;
     StorageReference storageReference;
     String uid = UUID.randomUUID().toString();
@@ -73,6 +76,9 @@ public class add_employee extends AppCompatActivity {
         btnAdd = findViewById(R.id.button_add_employee);
         edtFullname = findViewById(R.id.editNameEmployee);
         edtSalary = findViewById(R.id.editSalaryEmployee);
+        edtEmail = findViewById(R.id.editEmailEmployee);
+        edtPassword = findViewById(R.id.editPasswordEmployee);
+        edtRePassword = findViewById(R.id.editRePasswordEmployee);
     }
 
     void setEvent() {
@@ -83,15 +89,22 @@ public class add_employee extends AppCompatActivity {
                 employee.set_id(uid);
                 employee.setWorkdays(0);
                 employee.setName(edtFullname.getText().toString());
-                if (employee.getAvatar() == null) {
-                    employee.setAvatar("https://i.imgur.com/kSbCAMT.png");
+                email = edtEmail.getText().toString();
+                password = edtPassword.getText().toString();
+                repassword = edtPassword.getText().toString();
+                if(password.equals(repassword)) {
+                    if (employee.getAvatar() == null) {
+                        employee.setAvatar("https://i.imgur.com/kSbCAMT.png");
+                    }
+                    if (edtSalary.getText().toString().length() > 0) {
+                        employee.setSalary(Integer.parseInt(edtSalary.getText().toString()));
+                    }
+                    addEmployee(employee);
+                    Intent intent = new Intent(add_employee.this, manager_employee.class);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(MyApp.getAppContext(),"Mật khẩu nhập lại không khớp", Toast.LENGTH_LONG).show();
                 }
-                if (edtSalary.getText().toString().length() > 0) {
-                    employee.setSalary(Integer.parseInt(edtSalary.getText().toString()));
-                }
-                addEmployee(employee);
-                Intent intent = new Intent(add_employee.this, manager_employee.class);
-                startActivity(intent);
             }
         });
         AvatarUpload.setOnClickListener(new View.OnClickListener() {
@@ -164,10 +177,12 @@ public class add_employee extends AppCompatActivity {
             return;
         }
         DAO.EmployeeQuery employeeQuery = new EmployeeQuery();
+
+
         employeeQuery.addEmployee(employee, new QueryResponse<Boolean>() {
             @Override
             public void onSuccess(Boolean data) {
-
+                AuthenticationFirebase.createUserWithEmailAndPassword(email,password,employee);
             }
 
             @Override
@@ -213,6 +228,7 @@ public class add_employee extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
                                 pd.dismiss();
                                 Toast.makeText(add_employee.this, "Đã tải ảnh lên", Toast.LENGTH_LONG).show();
+                                employee.setAvatarUri(uri);
                                 String imgURL = uri.toString();
                                 employee.setAvatar(imgURL);
                                 Log.e("Firebase message", "Thêm firebase thành công " + imgURL);

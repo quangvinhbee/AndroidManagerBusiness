@@ -35,6 +35,17 @@ public class Login extends AppCompatActivity {
         setEvent();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (user != null) {
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+        }else{
+
+        }
+    }
+
     void setControl() {
         edtUsername = findViewById(R.id.editUsername);
         edtPassword = findViewById(R.id.editPassword);

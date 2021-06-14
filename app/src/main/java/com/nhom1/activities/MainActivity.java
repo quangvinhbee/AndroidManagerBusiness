@@ -1,12 +1,11 @@
 package com.nhom1.activities;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,9 +18,11 @@ import com.squareup.picasso.Picasso;
 public class MainActivity extends AppCompatActivity {
 
     DbHelper dbHelper;
-    private LinearLayout btn_department, btn_employee, btn_timekeeping, btn_statistical, btn_nhom1, btn_exit;
+    private LinearLayout btn_department, btn_employee, btn_notification, btn_statistical, btn_resetPassword, btn_exit;
     private ImageView imgAvt;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    TextView tvHello;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser user = mAuth.getCurrentUser();
     private boolean isAdmin = false;
 
     @Override
@@ -42,30 +43,51 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        Log.w("DEBUG",user.getEmail() + isAdmin);
         setControl();
         setEvent();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (user == null) {
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
+        }
     }
 
     void setControl() {
         btn_department = findViewById(R.id.mn_department);
         btn_employee = findViewById(R.id.mn_employee);
         btn_statistical = findViewById(R.id.statistical);
-        btn_nhom1 = findViewById(R.id.nhom1);
+        btn_resetPassword = findViewById(R.id.btn_resetPassword);
         btn_exit = findViewById(R.id.exit);
+        btn_notification = findViewById(R.id.notification);
         imgAvt = findViewById(R.id.imageAvatarMainActivity);
+        tvHello = findViewById(R.id.tvHello);
     }
 
     void setEvent() {
 
-//        Picasso.get()
-//                .load(user.getPhotoUrl())
-//                .into(imgAvt);
+        if (user != null) {
+            Picasso.get()
+                    .load(user.getPhotoUrl())
+                    .into(imgAvt);
+            tvHello.setText("Xin chào " + user.getDisplayName());
+        }
+
 
         if (!isAdmin) {
             btn_employee.setVisibility(View.GONE);
             btn_department.setVisibility(View.GONE);
         }
+
+        btn_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, notification.class));
+            }
+        });
 
         btn_department.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +105,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ranking.class));
+            }
+        });
+
+        btn_resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.sendPasswordResetEmail(user.getEmail());
             }
         });
 

@@ -194,7 +194,8 @@ public class manager_employee extends AppCompatActivity {
 
 
     void setEvent() {
-        adapter = new EmployeeAdapter(this, R.layout.activity_manager_department, data);
+        adapter = new EmployeeAdapter(this, R.layout.activity_manager_employee, data);
+        lvEmployee.setAdapter(adapter); // set list view
         showDialogEmployee();
     }
 
@@ -210,7 +211,7 @@ public class manager_employee extends AppCompatActivity {
     }
 
     private void showDialogEmployee() {
-        lvEmployee.setAdapter(adapter); // set list view
+
         lvEmployee.setOnItemClickListener(new AdapterView.OnItemClickListener() { // show dialog
             @SuppressLint("ResourceAsColor")
             @Override

@@ -5,133 +5,234 @@
     android:layout_height="match_parent"
     tools:context="com.nhom1.activities.add_department">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="30dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/imgAddUploadAvatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/uploadavatar"
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/colorPrimary"/>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="30dp">
-
-            <ImageView
-                android:id="@+id/imageView_userIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@color/colorPrimary"
-                android:padding="8dp"
-                android:src="@drawable/edit"
-                app:tint="@color/white" />
-
-            <EditText
-                android:id="@+id/editNameEmployee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageView_userIcon"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/imageView_userIcon"
-                android:background="@color/editTextBG"
-                android:hint="Nhập Tên Nhân Viên"
-                android:paddingLeft="20dp"
-                android:textSize="15sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="30dp">
-
-            <ImageView
-                android:id="@+id/imageView_userIcon1"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@color/colorPrimary"
-                android:padding="8dp"
-                android:src="@drawable/edit"
-                app:tint="@color/white" />
-
-            <EditText
-                android:id="@+id/editSalaryEmployee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageView_userIcon1"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/imageView_userIcon1"
-                android:inputType="number"
-                android:background="@color/editTextBG"
-                android:hint="Nhập Lương Cơ Bản"
-                android:paddingLeft="20dp"
-                android:textSize="15sp" />
-
-        </RelativeLayout>
-
+        android:padding="5dp"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="30dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:gravity="center_horizontal|center_vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imgAddUploadAvatar"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/uploadavatar"
+                    app:civ_border_color="@color/colorPrimary"
+                    app:civ_border_width="1dp" />
 
 
+            </RelativeLayout>
 
-            <Spinner
-                android:id="@+id/spinnerListDepartment"
+            <RelativeLayout
+                android:id="@+id/relativeLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageView_userIcon"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/imageView_userIcon"
-                android:background="@color/editTextBG"
-                android:padding="3dp"
-                android:spinnerMode="dialog"
-                android:tooltipText="Chọn phòng ban công tác" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:id="@+id/imageView_userIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimary"
+                    android:padding="8dp"
+                    android:src="@drawable/edit"
+                    app:tint="@color/white" />
+
+                <EditText
+                    android:id="@+id/editNameEmployee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageView_userIcon"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imageView_userIcon"
+                    android:background="@color/editTextBG"
+                    android:hint="Nhập Tên Nhân Viên"
+                    android:paddingLeft="20dp"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:id="@+id/imageView_userIcon1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimary"
+                    android:padding="8dp"
+                    android:src="@drawable/edit"
+                    app:tint="@color/white" />
+
+                <EditText
+                    android:id="@+id/editSalaryEmployee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageView_userIcon1"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imageView_userIcon1"
+                    android:background="@color/editTextBG"
+                    android:hint="Nhập Lương Cơ Bản"
+                    android:inputType="number"
+                    android:paddingLeft="20dp"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical">
+
+
+                <Spinner
+                    android:id="@+id/spinnerListDepartment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageView_userIcon"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imageView_userIcon"
+                    android:background="@color/editTextBG"
+                    android:padding="3dp"
+                    android:spinnerMode="dialog"
+                    android:tooltipText="Chọn phòng ban công tác" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:id="@+id/imageView_userIcon4"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimary"
+                    android:padding="8dp"
+                    android:src="@drawable/edit"
+                    app:tint="@color/white" />
+
+                <EditText
+                    android:id="@+id/editEmailEmployee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageView_userIcon4"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imageView_userIcon4"
+                    android:background="@color/editTextBG"
+                    android:hint="Nhập Email"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="20dp"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:id="@+id/imageView_userIcon5"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimary"
+                    android:padding="8dp"
+                    android:src="@drawable/edit"
+                    app:tint="@color/white" />
+
+                <EditText
+                    android:id="@+id/editPasswordEmployee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageView_userIcon5"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imageView_userIcon5"
+                    android:background="@color/editTextBG"
+                    android:hint="Nhập Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="20dp"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:id="@+id/imageView_userIcon6"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimary"
+                    android:padding="8dp"
+                    android:src="@drawable/edit"
+                    app:tint="@color/white" />
+
+                <EditText
+                    android:id="@+id/editRePasswordEmployee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageView_userIcon6"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imageView_userIcon6"
+                    android:background="@color/editTextBG"
+                    android:hint="Nhập Lại Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="20dp"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/button_add_employee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:backgroundTint="#FFD17C"
+                android:fontFamily="sans-serif-medium"
+                android:text="Thêm"
+                android:textColor="@color/white" />
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/button_add_employee"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="30dp"
-            android:backgroundTint="#FFD17C"
-            android:fontFamily="sans-serif-medium"
-            android:text="Thêm"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
+    </ScrollView>
 
 </RelativeLayout>

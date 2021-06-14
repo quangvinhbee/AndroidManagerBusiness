@@ -44,10 +44,12 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageAvatarMainActivity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical|right"
                 android:src="@drawable/exampleemployee"
-                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_color="@color/white"
+                android:padding="1dp"
                 app:civ_border_width="1dp" />
 
 
@@ -63,26 +65,12 @@
             android:layout_weight="1"
             android:background="@drawable/rounded">
 
-            <ImageView
-                android:id="@+id/imageView_userIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@color/white"
-                android:padding="8dp"
-                android:src="@drawable/loupe"
-                app:tint="@color/colorPrimary" />
-
-            <EditText
-                android:id="@+id/editUsername"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageView_userIcon"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/imageView_userIcon"
-                android:background="@color/white"
-                android:hint="Search"
-                android:paddingLeft="20dp"
-                android:textSize="15sp" />
+                android:padding="7dp"
+                android:id="@+id/tvHello"
+                android:text="Xin chào Vinh!"/>
 
         </RelativeLayout>
 
@@ -216,7 +204,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/nhom1"
+                android:id="@+id/btn_resetPassword"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_margin="10dp"
@@ -231,14 +219,15 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/jigsaw" />
+                    android:src="@drawable/emailreset" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
-                    android:text="@string/nhom_1" />
+                    android:gravity="center"
+                    android:text="Đổi mật khẩu" />
             </LinearLayout>
 
 

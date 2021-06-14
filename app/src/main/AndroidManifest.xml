@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.nhom1.untils.MyApp"
@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ManagerBusiness">
-        <activity android:name="com.nhom1.activities.ranking"></activity>
+        <activity android:name="com.nhom1.activities.notification"></activity>
+        <activity android:name="com.nhom1.activities.ranking" />
         <activity android:name="com.nhom1.activities.Detail_Salary" />
         <activity android:name="com.nhom1.activities.EditDepartment" />
         <activity android:name="com.nhom1.activities.EditEmployee" />
@@ -27,17 +28,16 @@
             android:parentActivityName="com.nhom1.activities.MainActivity" />
         <activity
             android:name="com.nhom1.activities.Login"
-            android:parentActivityName="com.nhom1.activities.MainActivity" >
+            android:parentActivityName="com.nhom1.activities.MainActivity">
+
+        </activity>
+        <activity android:name="com.nhom1.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.nhom1.activities.MainActivity">
-
-        </activity>
-
     </application>
 
 </manifest>
