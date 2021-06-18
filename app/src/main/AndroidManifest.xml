@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ManagerBusiness">
-        <activity android:name="com.nhom1.activities.notification"></activity>
+        <activity android:name="com.nhom1.activities.addNotification"></activity>
+        <activity android:name="com.nhom1.activities.notification" />
         <activity android:name="com.nhom1.activities.ranking" />
         <activity android:name="com.nhom1.activities.Detail_Salary" />
         <activity android:name="com.nhom1.activities.EditDepartment" />
@@ -28,9 +29,7 @@
             android:parentActivityName="com.nhom1.activities.MainActivity" />
         <activity
             android:name="com.nhom1.activities.Login"
-            android:parentActivityName="com.nhom1.activities.MainActivity">
-
-        </activity>
+            android:parentActivityName="com.nhom1.activities.MainActivity"></activity>
         <activity android:name="com.nhom1.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

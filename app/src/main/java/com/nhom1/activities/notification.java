@@ -68,8 +68,8 @@ public class notification extends AppCompatActivity {
         Intent intent;
         switch (item.getItemId()) {
             case R.id.addNotification:
-//                intent = new Intent(notification.this, add_employee.class);
-//                startActivity(intent);
+                intent = new Intent(notification.this, addNotification.class);
+                startActivity(intent);
                 break;
             case android.R.id.home:
                 // app icon in action bar clicked; go home

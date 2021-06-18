@@ -36,7 +36,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(Constants.CREATE_TABLE_DEPARTMENT);
         db.execSQL(Constants.CREATE_TABLE_EMPLOYEE);
         db.execSQL(Constants.CREATE_TABLE_TIMEKEEPING);
-        db.execSQL(Constants.CREATE_TABLE_USER);
+//        db.execSQL(Constants.CREATE_TABLE_USER);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+Constants.EMPLOYEE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+Constants.DEPARMENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+Constants.TIMEKEEPING_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS "+Constants.USER_TABLE);
+//        db.execSQL("DROP TABLE IF EXISTS "+Constants.USER_TABLE);
         onCreate(db);
     }
 }

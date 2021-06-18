@@ -195,7 +195,7 @@ public class manager_employee extends AppCompatActivity {
 
     void setEvent() {
         adapter = new EmployeeAdapter(this, R.layout.activity_manager_employee, data);
-        lvEmployee.setAdapter(adapter); // set list view
+
         showDialogEmployee();
     }
 
@@ -211,16 +211,15 @@ public class manager_employee extends AppCompatActivity {
     }
 
     private void showDialogEmployee() {
-
+        lvEmployee.setAdapter(adapter); // set list view
         lvEmployee.setOnItemClickListener(new AdapterView.OnItemClickListener() { // show dialog
             @SuppressLint("ResourceAsColor")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 employee = data.get(position);
                 final Boolean[] check = {false};
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(manager_employee.this);
-                View mView = getLayoutInflater().inflate(R.layout.dialog_employee, null);
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(manager_employee.this);// tạo dialog
+                View mView = getLayoutInflater().inflate(R.layout.dialog_employee, null); // set giao diện cho dialog
                 TextView tvfullname = (TextView) mView.findViewById(R.id.tvFullnameEmployee);
                 TextView tvDpEmployee = (TextView) mView.findViewById(R.id.tvDpEmployee);
                 TextView tvTotalWorkdays = (TextView) mView.findViewById(R.id.tvTotalWorkdays);
@@ -354,11 +353,14 @@ public class manager_employee extends AppCompatActivity {
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
+                        Log.e("SEARCH","ON_SEARCH "+ query);
+                        SearchEmploy(query);
                         return false;
                     }
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
+                        Log.e("SEARCH","ON_SEARCH "+ newText);
                         SearchEmploy(newText);
                         return true;
                     }

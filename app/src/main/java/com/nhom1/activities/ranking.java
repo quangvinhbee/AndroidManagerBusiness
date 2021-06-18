@@ -119,16 +119,16 @@ public class ranking extends AppCompatActivity {
 
         month.setText("Nhân viên có thành tích xuất sắc nhất tháng "+month1);
 
-//        for(Employee employee:data){
-//            Random obj = new Random();
-//            int rand_num = obj.nextInt(0xffffff + 1);
-//            String colorCode = String.format("#%06x", rand_num);
-//            pieChart.addPieSlice(
-//                    new PieModel(
-//                            employee.getName(),
-//                            employee.getSalary(),
-//                            Color.parseColor(colorCode)));
-//        }
+        for(Employee employee:data){
+            Random obj = new Random();
+            int rand_num = obj.nextInt(0xffffff + 1);
+            String colorCode = String.format("#%06x", rand_num);
+            pieChart.addPieSlice(
+                    new PieModel(
+                            employee.getName(),
+                            employee.getSalary(),
+                            Color.parseColor(colorCode)));
+        }
 
 
         // To animate the pie chart
