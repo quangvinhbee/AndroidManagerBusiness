@@ -8,24 +8,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.managerbusiness.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.nhom1.adapter.NotificationAdapter;
 import com.nhom1.models.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class notification extends AppCompatActivity {
 
     ListView lvNotification;
     NotificationAdapter adapter;
-    List<Notification> data = new ArrayList<>();
+    public List<Notification> data = new ArrayList<>();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser user = mAuth.getCurrentUser();
+    FirebaseFirestore db;
+
+    private static final String TAG = "DocSnippets";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +47,8 @@ public class notification extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // set action bar
         getSupportActionBar().setTitle("Thông báo");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xff78CFFD));
+
+        getDataNotification();
         setControl();
         setEvent();
     }
@@ -45,15 +59,36 @@ public class notification extends AppCompatActivity {
 
 
     void setEvent() {
-        Notification notice = new Notification("THÔNG BÁO MỚI", "22:00 19/2/2102",
-                "Từ 0h ngày 15/6, TP.HCM tiếp tục áp dụng Chỉ thị 15 trên toàn thành phố. " +
-                        "Riêng một số loại hình kinh doanh dịch vụ thiết yếu vẫn được hoạt động.");
-        data.add(notice);
-        data.add(notice);
-        data.add(notice);
-        adapter = new NotificationAdapter(this, R.layout.activity_notification, data);
-        lvNotification.setAdapter(adapter);
+        Log.e(TAG,"item.getTitle()");
+        for (Notification item:data){
+            Log.e(TAG,item.getTitle());
+        }
+
     }
+
+    void getDataNotification(){
+        db = FirebaseFirestore.getInstance();
+        db.collection("notification")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Notification> dta = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Notification noti = document.toObject(Notification.class);
+                                dta.add(noti);
+                            }
+                            adapter = new NotificationAdapter(notification.this, R.layout.activity_notification, dta);
+                            lvNotification.setAdapter(adapter);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
